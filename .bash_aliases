@@ -1,0 +1,8 @@
+alias untar='tar -zxvf'
+alias maketar='tar -czvf'
+alias vi='nvim'
+alias ..='cd ..'
+alias lsa='ls -al --color=auto'
+alias ls='ls -l --color=auto'
+alias hostname='cat /etc/hostname'
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'

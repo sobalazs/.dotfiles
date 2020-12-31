@@ -1,0 +1,5 @@
+# Keyboar Layout
+setxkbmap hu &
+
+# Compositor
+picom -f &
