@@ -3,3 +3,6 @@ setxkbmap hu &
 
 # Compositor
 picom -f &
+
+export EDITOR=nvim
+eval `keychain --clear --noask --quiet --agents ssh,gpg --eval`
