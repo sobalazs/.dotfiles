@@ -1,8 +1,16 @@
 # Keyboar Layout
 setxkbmap hu &
 
+# Set GPU
+sh ./.nvidia-settings-rc
+
 # Compositor
 picom -f &
 
+# set env
 export EDITOR=nvim
+export WINIT_X11_SCALE_FACTOR=1
+
+# Editor + ssh,gpg
 eval `keychain --clear --noask --quiet --agents ssh,gpg --eval`
+

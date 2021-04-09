@@ -49,7 +49,7 @@ myClickJustFocuses = False
 
 -- Width of the window border in pixels.
 --
-myBorderWidth   = 2
+myBorderWidth   = 1
 
 -- m"odMask lets you specify which modkey you want to use. The default
 -- is mod1Mask ("left alt").  You may also consider using mod3Mask
@@ -82,8 +82,8 @@ myScratchpads = [
 
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "#dddddd"
-myFocusedBorderColor = "#ff0000"
+myNormalBorderColor  = "#000000"
+myFocusedBorderColor = "#FFFFFF"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -284,27 +284,28 @@ myLogHook = return ()
 myStartupHook = do
   spawnOnce "picom -f &"
 
-myTitleColor     = "#eeeeee"  -- color of window title
+myTitleColor     = "#D2D2DB"  -- color of window title
 myTitleLength    = 80         -- truncate window title to this length
-myCurrentWSColor = "#e6744c"  -- color of active workspace
+myCurrentWSColor = "#D2D2DB"  -- color of active workspace
 myVisibleWSColor = "#c185a7"  -- color of inactive workspace
 myUrgentWSColor  = "#cc0000"  -- color of workspace with 'urgent' window
-myCurrentWSLeft  = "["        -- wrap active workspace with these
-myCurrentWSRight = "]"
-myVisibleWSLeft  = "("        -- wrap inactive workspace with these
-myVisibleWSRight = ")"
-myUrgentWSLeft  = "{"         -- wrap urgent workspace with these
-myUrgentWSRight = "}"
+myCurrentWSLeft  = ""        -- wrap active workspace with these
+myCurrentWSRight = ""
+myVisibleWSLeft  = ""        -- wrap inactive workspace with these
+myVisibleWSRight = ""
+myUrgentWSLeft  = ""         -- wrap urgent workspace with these
+myUrgentWSRight = ""
 
 myPP = xmobarPP {
-    -- ppCurrent = xmobarColor "#429942" "" . wrap "<" ">"
-    ppTitle = xmobarColor myTitleColor "q" . shorten myTitleLength
+    ppTitle = xmobarColor myTitleColor "" . shorten myTitleLength
     , ppCurrent = xmobarColor myCurrentWSColor ""
         . wrap myCurrentWSLeft myCurrentWSRight
     , ppVisible = xmobarColor myVisibleWSColor ""
         . wrap myVisibleWSLeft myVisibleWSRight
     , ppUrgent = xmobarColor myUrgentWSColor ""
         . wrap myUrgentWSLeft myUrgentWSRight
+    , ppLayout = const ""
+    , ppSep = ""
 }
 
 myBar = "xmobar -x 0 ~/.config/xmobar/xmobar.conf"
