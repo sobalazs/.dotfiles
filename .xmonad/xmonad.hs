@@ -93,8 +93,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch a terminal
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
-    -- launch dmenu
-    , ((0,               xK_Super_L     ), spawn "dmenu_run")
+    -- launch rofi
+    , ((0,               xK_Super_L     ), spawn "rofi -show run")
 
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
@@ -164,7 +164,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
     
     -- Mute
-    , ((0, xF86XK_AudioMute), spawn "/bin/sh $HOME/.xmonad/scripts/toggleMute.sh")
+    , ((0, xF86XK_AudioMute), spawn "playerctl play-pause") -- /bin/sh $HOME/.xmonad/scripts/toggleMute.sh")
     -- Raise Volume
     , ((0, xF86XK_AudioRaiseVolume), spawn "amixer set Master 5%+")
     -- Lower Volume
