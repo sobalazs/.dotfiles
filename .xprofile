@@ -1,16 +1,31 @@
-# Keyboar Layout
-setxkbmap hu &
+# Keyboar Layout + numlock
+#setxkbmap hu &
+#numlockx on
 
-# Set GPU
-sh ./.nvidia-settings-rc
+# Set GPU settings
+#sh ./.nvidia-settings-rc
 
 # Compositor
-picom -f &
+#picom -f &
+
+# Background
+#sh ./.config/fehbg
+
+# xBindkeys
+#xbindkeys -f $HOME/.config/xbindkeys/xbindkeysrc
 
 # set env
-export EDITOR=nvim
-export WINIT_X11_SCALE_FACTOR=1
+#export EDITOR=nvim
+#export WINIT_X11_SCALE_FACTOR=1
 
-# Editor + ssh,gpg
-eval `keychain --clear --noask --quiet --agents ssh,gpg --eval`
+# ssh,gpg
+#eval `keychain --clear --noask --quiet --agents ssh,gpg --eval`
+#
+export $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
 
+if [ -n "$DESKTOP_SESSION" ];then
+    eval $(gnome-keyring-daemon --start)
+    export SSH_AUTH_SOCK
+fi
+
+sudo openrgb -c 00FFFF

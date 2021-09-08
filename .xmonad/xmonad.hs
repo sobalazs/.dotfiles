@@ -15,21 +15,19 @@ import System.Exit
 
 -- Hooks
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.EwmhDesktops
 
 -- Layouts
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 import XMonad.Layout.ThreeColumns
 
-
 -- Utils
 import XMonad.Util.Run
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.SpawnOnce
-
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -38,6 +36,7 @@ import qualified Data.Map        as M
 -- certain contrib modules.
 --
 myTerminal      = "alacritty"
+myStatusbar     = "polybar mybar -c $HOME/.config/polybar/main.ini"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -49,8 +48,7 @@ myClickJustFocuses = False
 
 -- Width of the window border in pixels.
 --
-myBorderWidth   = 1
-
+myBorderWidth   = 2
 -- m"odMask lets you specify which modkey you want to use. The default
 -- is mod1Mask ("left alt").  You may also consider using mod3Mask
 -- ("right alt"), which does not conflict with emacs keybindings. The
@@ -67,7 +65,7 @@ myModMask       = mod1Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
+myWorkspaces    = ["1","2","3","4"]
 
 
 -- Scratchpads for floating applications
@@ -76,14 +74,14 @@ myScratchpads = [
      NS "ncspot" command find manage
     ]
   where 
-    command = (myTerminal ++ " -t ncspot -e ncspot")
-    find    = (title =? "ncspot")
+    command = (myTerminal ++ " -t Spotify -e ncspot")
+    find    = (title =? "Spotify")
     manage  = (customFloating $ W.RationalRect (0.6) (0.1) (1/3) (2/3))
 
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "#000000"
-myFocusedBorderColor = "#FFFFFF"
+myNormalBorderColor  = "#12121F"
+myFocusedBorderColor = "#60D3A0"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -94,11 +92,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
     -- launch rofi
-    , ((0,               xK_Super_L     ), spawn "rofi -show run")
-
-    -- launch gmrun
-    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
-
+    , ((0,               xK_Super_L     ), spawn "rofi -show drun -theme /home/phnx/.config/rofi/theme.rasi ")
+    
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
 
@@ -107,9 +102,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     --  Reset the layouts on the current workspace to default
     , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
-
-    -- Resize viewed windows to the correct size
-    , ((modm,               xK_n     ), refresh)
 
     -- Move focus to the next window
     , ((modm,               xK_Tab   ), windows W.focusDown)
@@ -152,23 +144,30 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
     --
-    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+    , ((modm              , xK_b     ), spawn "brave") 
+    , ((modm              , xK_p     ), sendMessage ToggleStruts)
 
     -- Quit xmon
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
 
     -- Restart xmonad
-    , ((modm              , xK_q     ), spawn "xmonad --recompile; killall xmobar; xmonad --restart")
+    , ((modm              , xK_q     ), spawn "xmonad --recompile; killall -q polybar; xmonad --restart")
 
+    , ((modm              , xK_Escape   ), spawn "sh $HOME/.config/rofi/pmenu.sh")
+    , ((modm              , xK_Print    ), spawn "scrot -e 'xclip -selection clipboard -t image/png -i $f' ~/Pictures/screenshots/'%Y-%m-%d-%H%M%S_$wx$h.png'")
     -- Run xmessage with a summary of the default keybindings (useful for beginners)
     , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
     
     -- Mute
-    , ((0, xF86XK_AudioMute), spawn "playerctl play-pause") -- /bin/sh $HOME/.xmonad/scripts/toggleMute.sh")
+    , ((0, xF86XK_AudioPlay),        spawn "sh $HOME/.xmonad/scripts/audioctl.sh play-pause") --playerctl -a play-pause") -- /bin/sh $HOME/.xmonad/scripts/toggleMute.sh")
     -- Raise Volume
-    , ((0, xF86XK_AudioRaiseVolume), spawn "amixer set Master 5%+")
+    , ((0, xF86XK_AudioRaiseVolume), spawn "sh $HOME/.xmonad/scripts/audioctl.sh up")
     -- Lower Volume
-    , ((0, xF86XK_AudioLowerVolume), spawn "amixer set Master 5%-")
+    , ((0, xF86XK_AudioLowerVolume), spawn "sh $HOME/.xmonad/scripts/audioctl.sh down")
+    -- Next Song
+    , ((0, xF86XK_AudioNext),        spawn "sh $HOME/.xmonad/scripts/audioctl.sh next")
+    -- Previous Song
+    , ((0, xF86XK_AudioPrev),        spawn "sh $HOME/.xmonad/scripts/audioctl.sh prev")
 
     -- Scratchpads
     , ((0                 , xK_F12   ), namedScratchpadAction myScratchpads "ncspot")
@@ -223,7 +222,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayoutHook = spacingRaw True (Border 0 0 0 0) True (Border 10 10 10 10) True $ tiledThree ||| Full
+myLayoutHook = smartBorders (avoidStruts (spacingRaw True (Border 0 0 0 0) True (Border 10 10 10 10) True $ tiledThree ||| Full))
   where
      tiledThree = ThreeColMid nmaster delta ratio
      nmaster = 1
@@ -248,11 +247,12 @@ myLayoutHook = spacingRaw True (Border 0 0 0 0) True (Border 10 10 10 10) True $
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "Gimp"           --> doFloat
+    , className =? "Dunst"          --> doFloat
     , resource  =? "ncspot"         --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore
     , isFullscreen                  --> doFullFloat    
-    ] <+> namedScratchpadManageHook myScratchpads
+    ] <+> namedScratchpadManageHook myScratchpads 
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -263,15 +263,16 @@ myManageHook = composeAll
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
-myEventHook = fullscreenEventHook
+myEventHook = ewmhDesktopsEventHook <+> fullscreenEventHook 
 
 ------------------------------------------------------------------------
 -- Status bars and logging
 
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
-myLogHook = return ()
+--myLogHook h = dynamicLogWithPP $ def
+--   { ppOutput = hPutStrLn h }
+myLogHook = ewmhDesktopsLogHookCustom namedScratchpadFilterOutWorkspace
 
 ------------------------------------------------------------------------
 -- Startup hook
@@ -282,41 +283,22 @@ myLogHook = return ()
 --
 -- By default, do nothing.
 myStartupHook = do
-  spawnOnce "picom -f &"
-
-myTitleColor     = "#D2D2DB"  -- color of window title
-myTitleLength    = 80         -- truncate window title to this length
-myCurrentWSColor = "#D2D2DB"  -- color of active workspace
-myVisibleWSColor = "#c185a7"  -- color of inactive workspace
-myUrgentWSColor  = "#cc0000"  -- color of workspace with 'urgent' window
-myCurrentWSLeft  = ""        -- wrap active workspace with these
-myCurrentWSRight = ""
-myVisibleWSLeft  = ""        -- wrap inactive workspace with these
-myVisibleWSRight = ""
-myUrgentWSLeft  = ""         -- wrap urgent workspace with these
-myUrgentWSRight = ""
-
-myPP = xmobarPP {
-    ppTitle = xmobarColor myTitleColor "" . shorten myTitleLength
-    , ppCurrent = xmobarColor myCurrentWSColor ""
-        . wrap myCurrentWSLeft myCurrentWSRight
-    , ppVisible = xmobarColor myVisibleWSColor ""
-        . wrap myVisibleWSLeft myVisibleWSRight
-    , ppUrgent = xmobarColor myUrgentWSColor ""
-        . wrap myUrgentWSLeft myUrgentWSRight
-    , ppLayout = const ""
-    , ppSep = ""
-}
-
-myBar = "xmobar -x 0 ~/.config/xmobar/xmobar.conf"
-toggleStrutKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
+  spawnOnce "setxkbmap hu &"
+  spawnOnce "numlockx on &"
+  spawnOnce "sh $HOME/.config/fehbg &"
+  spawnOnce "xbindkeys -f $HOME/.config/xbindkeys/xbindkeysrc &"
+  spawnOnce "picom &"
+  spawnOnce "dunst &"
+  spawnOnce "tail -f /tmp/xob_vol | xob -m 100 -t 1500 -c ~/.config/xob/styles.cfg -s default &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = xmonad =<< statusBar myBar myPP toggleStrutKey defaults  
+main = do
+        handle <- spawnPipe myStatusbar
+        xmonad $ docks $ ewmh defaults 
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -340,7 +322,7 @@ defaults = def {
         mouseBindings      = myMouseBindings,
 
       -- hooks, layouts
-        layoutHook         = smartBorders (myLayoutHook),
+        layoutHook         = myLayoutHook,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
         logHook            = myLogHook,
