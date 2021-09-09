@@ -69,14 +69,22 @@ myWorkspaces    = ["1","2","3","4"]
 
 
 -- Scratchpads for floating applications
-myScratchpads :: [NamedScratchpad]
-myScratchpads = [
-     NS "ncspot" command find manage
-    ]
-  where 
+spncspot :: NamedScratchpad
+spncspot = NS "ncspot" command query hook
+  where
     command = (myTerminal ++ " -t Spotify -e ncspot")
-    find    = (title =? "Spotify")
+    query   = (title =? "Spotify")
+    hook    = (customFloating $ W.RationalRect (0.6) (0.1) (1/3) (2/3))
+
+spconky :: NamedScratchpad
+spconky = NS "conky" command find manage
+  where
+    command = "conky"
+    find    = (className =? "Conky")
     manage  = (customFloating $ W.RationalRect (0.6) (0.1) (1/3) (2/3))
+
+myScratchpads :: [NamedScratchpad]
+myScratchpads = [ spncspot, spconky ]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -171,6 +179,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Scratchpads
     , ((0                 , xK_F12   ), namedScratchpadAction myScratchpads "ncspot")
+    , ((0                 , xK_F11   ), namedScratchpadAction myScratchpads "conky")
     ]
     ++
 
@@ -289,7 +298,7 @@ myStartupHook = do
   spawnOnce "xbindkeys -f $HOME/.config/xbindkeys/xbindkeysrc &"
   spawnOnce "picom &"
   spawnOnce "dunst &"
-  spawnOnce "tail -f /tmp/xob_vol | xob -m 100 -t 1500 -c ~/.config/xob/styles.cfg -s default &"
+  spawnOnce "sh $HOME/.xmonad/scripts/startxob.sh"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
