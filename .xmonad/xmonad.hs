@@ -298,7 +298,7 @@ myStartupHook = do
   spawnOnce "xbindkeys -f $HOME/.config/xbindkeys/xbindkeysrc &"
   spawnOnce "picom &"
   spawnOnce "dunst &"
-  spawnOnce "sh $HOME/.xmonad/scripts/startxob.sh"
+  spawnOnce "sh $HOME/.xmonad/scripts/startxob.sh &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
