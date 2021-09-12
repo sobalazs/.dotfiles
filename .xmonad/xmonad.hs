@@ -179,7 +179,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Scratchpads
     , ((0                 , xK_F12   ), namedScratchpadAction myScratchpads "ncspot")
-    , ((0                 , xK_F11   ), namedScratchpadAction myScratchpads "conky")
+    , ((modm .|. shiftMask, xK_F11   ), namedScratchpadAction myScratchpads "conky")
     ]
     ++
 
@@ -298,7 +298,7 @@ myStartupHook = do
   spawnOnce "xbindkeys -f $HOME/.config/xbindkeys/xbindkeysrc &"
   spawnOnce "picom &"
   spawnOnce "dunst &"
-  spawnOnce "sh $HOME/.xmonad/scripts/startxob.sh &"
+  spawn "tail -f /tmp/xob_vol | xob -m 100 -t 1500 &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
