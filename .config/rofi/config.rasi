@@ -1,7 +1,7 @@
 configuration {
 	modi: "run,ssh,drun";
-	width: 20;
-	lines: 10;
+/*	width: 20;*/
+/*	lines: 10;*/
 /*	columns: 1;*/
 	font: "Source Code Pro 16";
 /*	bw: 1;*/
@@ -41,10 +41,10 @@ configuration {
 /*	tokenize: true;*/
 /*	m: "-5";*/
 /*	line-margin: 2;*/
-	line-padding: 5;
+/*	line-padding: 5;*/
 /*	filter: ;*/
 /*	separator-style: "dash";*/
-	hide-scrollbar: true;
+/*	hide-scrollbar: true;*/
 /*	fullscreen: false;*/
 /*	fake-transparency: false;*/
 /*	dpi: -1;*/

@@ -6,8 +6,8 @@
 configuration {
   font:            "Source Code Pro 18";
   disable-history: false;
-  fullscreen:      false;
-  hide-scrollbar:  true;
+/*  fullscreen:      false;*/
+/*  hide-scrollbar:  true;*/
   sidebar-mode:    false;
   show-icons:      false;
 }
