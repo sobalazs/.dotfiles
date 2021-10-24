@@ -48,7 +48,7 @@ myClickJustFocuses = False
 
 -- Width of the window border in pixels.
 --
-myBorderWidth   = 2
+myBorderWidth   = 1
 -- m"odMask lets you specify which modkey you want to use. The default
 -- is mod1Mask ("left alt").  You may also consider using mod3Mask
 -- ("right alt"), which does not conflict with emacs keybindings. The
@@ -298,7 +298,7 @@ myStartupHook = do
   spawnOnce "xbindkeys -f $HOME/.config/xbindkeys/xbindkeysrc &"
   spawnOnce "picom &"
   spawnOnce "dunst &"
-  spawn "tail -f /tmp/xob_vol | xob -m 100 -t 1500 &"
+  spawnOnce "tail -f /tmp/xob_vol | xob -m 100 -t 1500 &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.

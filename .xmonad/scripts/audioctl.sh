@@ -43,11 +43,13 @@ case $1 in
   "play-pause")
 	playerctl -p ncspot play-pause
 	get_album_cover
-	if [ `playerctl metadata --format {{status}}` = "Playing" ]; then
+	if [ `playerctl -p ncspot metadata --format {{status}}` = "Playing" ]; then
 	    dunstify "`get_artist`" "`get_title`" -I $imgpath -r 20 -a "Now playing..."
+
 	else
 	    dunstify "`get_artist`" "`get_title`" -I $imgpath -r 20 -a "Paused!"
 	fi
+
 	;;
    *)
 	dunstify "`get_artist`" "`get_title`" -I $imgpath -r 20 -a "Now playing..."

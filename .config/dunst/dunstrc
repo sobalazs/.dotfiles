@@ -30,8 +30,8 @@
     # The width can be negative.  In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
     #geometry = "700x10-20+70"
-    width = 500
-    height = 0, 300
+    width = (500, 700)
+    height = (0, 300)
     origin = top-right
     offset = 10x70
 
