@@ -22,7 +22,7 @@ esac
 
 parse_git_info() {
 if [ -d .git ]; then
-	echo -e "\e[1;34m"\ $(git branch -v | awk '{print $2}')"\e[0m \e[1;36m|\e[0m \e[1;35m"$(git tag | tail -1)"\e[0m\n\r"
+	echo -e "\e[1;34m"\ $(git branch -v | awk '{print $2}')"\e[0m \e[1;36m|\e[0m \e[1;35m"$(git tag | tail -1)"\e[0m \e[1;36m|\e[0m \e[1;31m" $(git status | grep modified | wc -l)"\e[0m\n\r"
 fi
 }
 
