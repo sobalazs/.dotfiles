@@ -20,7 +20,17 @@ case ${TERM} in
           ;;
 esac
 
-PS1="> "
+parse_git_info() {
+if [ -d .git ]; then
+	echo -e "\e[1;34m"\ $(git branch -v | awk '{print $2}')"\e[0m \e[1;36m|\e[0m \e[1;35m"$(git tag | tail -1)"\e[0m\n\r"
+fi
+}
+
+#start -> \e[
+#color -> 0;32m
+#end   -> \e[0m
+
+PS1="\$(parse_git_info)> "
 #PS1='\[\e[1;44;30m\] \u@\h \[\e[00m\] \[\e[0;100;97m\] \w \[\e[00m\] '
 
 if [ -f ~/.bash_aliases ]; then
