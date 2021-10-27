@@ -2,48 +2,36 @@
 # ~/.bashrc
 #
 
-#if [ -n "$DESKTOP_SESSION" ];then
-#     eval $(gnome-keyring-daemon --start)
-#     export SSH_AUTH_SOCK
-#fi
-
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-fgcolor="\[$(tput setaf 256)\]" #https://misc.flogisoft.com/bash/tip_colors_and_formatting
-bgcolor="\[$(tput setab 0)\]"
-resetcolor="\[$(tput sgr0)\]"
-
-case ${TERM} in
- alacritty)
-          PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
-          ;;
-esac
-
-parse_git_info() {
-if [ -d .git ]; then
-	echo -e "\e[1;34m"\ $(git branch -v | awk '{print $2}')"\e[0m \e[1;36m|\e[0m \e[1;35m"$(git tag | tail -1)"\e[0m \e[1;36m|\e[0m \e[1;31m" $(git status | grep modified | wc -l)"\e[0m\n\r"
-fi
-}
-
-#start -> \e[
-#color -> 0;32m
-#end   -> \e[0m
-
-PS1="\$(parse_git_info)> "
-#PS1='\[\e[1;44;30m\] \u@\h \[\e[00m\] \[\e[0;100;97m\] \w \[\e[00m\] '
-
+# Add Aliases
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
+# Add autocompletion for pass
 if [ -f ~/.bash_autocomp ]; then
     . ~/.bash_autocomp
 fi
 
-#if [ -n "$DESKTOP_SESSION" ];then
-#    eval $(gnome-keyring-daemon --start)
-#    export SSH_AUTH_SOCK
-#fi
+# Add git Status line when in "git-folder?"
+parse_git_info() {
+	if [ -d .git ]; then
+		branch=$(git branch -v | awk '{print $2}')
+		version=$(git tag | tail -1)
+		modified=$(git status | grep modified | wc -l)
+		color_in_branch='\[\033[1m\]\[\033[38;5;12m\]\[\033[48;5;0m\] '"$branch"'\[\033[0m\] \[\033[38;1;3m\]\[\033[48;1;2m\]|\[\033[0m\]'
+		color_in_version='\[\033[1m\]\[\033[38;5;13m\]\[\033[48;5;0m\]v '"$version"'\[\033[0m\] \[\033[38;1;3m\]\[\033[48;1;2m\]|\[\033[0m\]'
+		color_in_modified='\[\033[1m\]\[\033[38;5;9m\]\[\033[48;5;0m\] '"$modified"'\[\033[0m\]\r\n'
+		PS1="$color_in_branch $color_in_version $color_in_modified> "
+	else
+		PS1="> "
+	fi
+}
 
+# Render PS1 by every command
+PROMPT_COMMAND=parse_git_info
+
+# Add fancy start script :)
 pfetch
