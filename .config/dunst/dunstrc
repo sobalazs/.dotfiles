@@ -31,7 +31,7 @@
     # screen width minus the width defined in within the geometry option.
     #geometry = "700x10-20+70"
     width = (500, 700)
-    height = (0, 300)
+    height = 300
     origin = top-right
     offset = 10x70
 
@@ -50,7 +50,7 @@
     # The height of the entire notification.  If the height is smaller
     # than the font height and padding combined, it will be raised
     # to the font height and padding.
-    notification_height = 10
+    #notification_height = 10
 
     # Draw a line of "separator_height" pixel height between two
     # notifications.
@@ -210,7 +210,7 @@
     # Print a notification on startup.
     # This is mainly for error detection, since dbus (re-)starts dunst
     # automatically after a crash.
-    startup_notification = false
+    #startup_notification = false
 
     # Manage dunst's desire for talking
     # Can be one of the following values:
@@ -219,7 +219,7 @@
     #  mesg: Important Messages
     #  info: all unimportant stuff
     # debug: all less than unimportant stuff
-    verbosity = mesg
+    #verbosity = mesg
 
     # Define the corner radius of the notification window
     # in pixel size. If the radius is 0, you have no rounded
@@ -270,28 +270,6 @@
     # using the resolution and physical size. This might be useful in setups
     # where there are multiple screens with very different dpi values.
     per_monitor_dpi = false
-
-[shortcuts]
-
-    # Shortcuts are specified as [modifier+][modifier+]...key
-    # Available modifiers are "ctrl", "mod1" (the alt-key), "mod2",
-    # "mod3" and "mod4" (windows-key).
-    # Xev might be helpful to find names for keys.
-
-    # Close notification.
-    close = ctrl+space
-
-    # Close all notifications.
-    close_all = ctrl+shift+space
-
-    # Redisplay last message(s).
-    # On the US keyboard layout "grave" is normally above TAB and left
-    # of "1". Make sure this key actually exists on your keyboard layout,
-    # e.g. check output of 'xmodmap -pke'
-    #history = ctrl+grave
-
-    # Context menu.
-    context = ctrl+shift+period
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
@@ -431,11 +409,12 @@
 #    appname = "some_volume_notifiers"
 #    set_stack_tag = "volume"
 #
-[ncspot]
-    appname = "ncspot"
-    format = ""
-    timeout = 5
-    script = "/home/phnx/.xmonad/scripts/audioctl.sh play-pause"
+[Spotify]
+    summary = ncspot
+    icon = 'test'
+    body = "test"
+    format = '<b>%a%b</b>
+    #script = "/home/phnx/.xmonad/scripts/audioctl.sh play-pause"
 
 [volume]
     stack_tag = 2
